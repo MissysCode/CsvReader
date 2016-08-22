@@ -1,4 +1,4 @@
-import sys, csv
+import sys, csv, collections
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QFileDialog, QInputDialog, QMessageBox
 from ui_csvreader import Ui_MainWindow
 from csvmodel import MyModel
@@ -9,11 +9,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 		super().__init__()
 		self.setupUi(self)
 
-		self.actionOpen_csv_file.triggered.connect(self.open_dialog)
+		self.openButton.clicked.connect(self.open_dialog)
+		self.saveButton.clicked.connect(self.save_dialog)
 
 	def open_dialog(self):
-		key_input = QInputDialog.getText(self, 'Input Dialog', 'Input key?')
-		self.headerkey = key_input[0]
 		file_open = QFileDialog.getOpenFileName(self, 'Open File')
 		if file_open[0]:
 			self.open_csv(file_open[0])
@@ -21,8 +20,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 			print ("Cancel")
 			return None
 
+	def save_dialog(self):
+		file_save = QFileDialog.getSaveFileName(self, 'Save File', '/Documents/', '.csv')
+
 	def open_csv(self, csvfile):
-		csv_dict = {}
+		csv_list = []
 		headers_row = []
 		first_row = True
 
@@ -32,20 +34,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 				for row in reader:
 					if (first_row):
 						headers_row = row
-						if self.headerkey not in row:
-							QMessageBox.about(self, "Error", "No \"" + self.headerkey + "\" in headers, can't process.")
-							return None
-						else:
-							print (self.headerkey)
-							key_index = row.index(self.headerkey)
-							first_row = False
+						first_row = False
 					else:
-						csv_dict[(row[key_index])] = row
+						csv_list.append(row)
 				table = self.tableView
-				model = MyModel(csv_dict, headers_row)
+				model = MyModel(csv_list, headers_row)
 				table.setModel(model)
 
 		except Exception as e:
+			QMessageBox.about(self, "Error", str(e))
 			raise e
 
 if __name__ == '__main__':

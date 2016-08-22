@@ -5,16 +5,15 @@ class MyModel(QAbstractTableModel):
 	def __init__(self, data, headerdata):
 		super().__init__()
 		if data:
-			self.csvdict = data
+			self.csv_data = data
 			self.headers = headerdata
-			self.ldata = list(self.csvdict.values())
 
 	def rowCount(self, parent):
-		count = len(self.csvdict)
+		count = len(self.csv_data)
 		return (count)
 
 	def columnCount(self, parent):
-		count = len(self.csvdict.values())
+		count = len(self.headers)
 		return (count)
 
 	def headerData(self, section, orientation, role):
@@ -31,7 +30,7 @@ class MyModel(QAbstractTableModel):
 	def data(self, index, role):
 		try:
 			if role == Qt.DisplayRole:
-				return self.ldata[index.row()][index.column()]
+				return self.csv_data[index.row()][index.column()]
 		except:
 			pass
 
