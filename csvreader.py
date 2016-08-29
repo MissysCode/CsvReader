@@ -1,4 +1,5 @@
-import sys, csv, collections
+import sys, csv
+from collections import namedtuple
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QFileDialog, QInputDialog, QMessageBox
 from ui_csvreader import Ui_MainWindow
 from csvmodel import MyModel
@@ -8,9 +9,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 	def __init__(self):
 		super().__init__()
 		self.setupUi(self)
+		self.model = MyModel()
 
 		self.openButton.clicked.connect(self.open_dialog)
 		self.saveButton.clicked.connect(self.save_dialog)
+		self.deleteButton.clicked.connect(self.delete_row)
 
 	def open_dialog(self):
 		file_open = QFileDialog.getOpenFileName(self, 'Open File')
@@ -22,6 +25,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 	def save_dialog(self):
 		file_save = QFileDialog.getSaveFileName(self, 'Save File', '/Documents/', '.csv')
+
+	def delete_row(self):
+		reply = QMessageBox.question(self, "Delete", "Do you want to delete selected row?", 
+			QMessageBox.Yes, QMessageBox.No)
+		if reply == QMessageBox.Yes:
+			indexes = self.tableView.selectedIndexes()
+			for i in indexes:
+				self.model.removeRow(i.row())
 
 	def open_csv(self, csvfile):
 		csv_list = []
@@ -38,12 +49,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 					else:
 						csv_list.append(row)
 				table = self.tableView
-				model = MyModel(csv_list, headers_row)
-				table.setModel(model)
+				self.model = MyModel(csv_list, headers_row)
+				table.setModel(self.model)
+				self.deleteButton.setEnabled(True)
 
 		except Exception as e:
 			QMessageBox.about(self, "Error", str(e))
 			raise e
+
+	def save_csv(self):
+		pass
 
 if __name__ == '__main__':
 	app = QApplication(sys.argv)

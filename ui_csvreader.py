@@ -32,6 +32,10 @@ class Ui_MainWindow(object):
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
         self.tableView = QtWidgets.QTableView(self.centralwidget)
+        self.tableView.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.tableView.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.tableView.setGridStyle(QtCore.Qt.SolidLine)
+        self.tableView.setSortingEnabled(False)
         self.tableView.setObjectName("tableView")
         self.verticalLayout.addWidget(self.tableView)
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
@@ -54,8 +58,6 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
-        self.actionOpen_csv_file = QtWidgets.QAction(MainWindow)
-        self.actionOpen_csv_file.setObjectName("actionOpen_csv_file")
         self.actionQuit = QtWidgets.QAction(MainWindow)
         self.actionQuit.setObjectName("actionQuit")
 
@@ -68,7 +70,6 @@ class Ui_MainWindow(object):
         self.openButton.setText(_translate("MainWindow", "Open file"))
         self.saveButton.setText(_translate("MainWindow", "Save file"))
         self.mergeButton.setText(_translate("MainWindow", "Merge file"))
-        self.deleteButton.setText(_translate("MainWindow", "Delete line"))
-        self.actionOpen_csv_file.setText(_translate("MainWindow", "Open .csv-file..."))
+        self.deleteButton.setText(_translate("MainWindow", "Delete row"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
 

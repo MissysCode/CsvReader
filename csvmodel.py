@@ -2,7 +2,7 @@ from PyQt5.QtCore import *
 
 class MyModel(QAbstractTableModel):
 
-	def __init__(self, data, headerdata):
+	def __init__(self, data = None, headerdata = None):
 		super().__init__()
 		if data:
 			self.csv_data = data
@@ -36,4 +36,7 @@ class MyModel(QAbstractTableModel):
 
 		return None
 
+	def removeRow(self, position, rows=1, index=QModelIndex()):
+		self.beginRemoveRows(QModelIndex(), position, position)
+		self.endRemoveRows()
 
