@@ -4,64 +4,72 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QTreeWidgetItem, QFileDia
 from ui_csvreader import Ui_MainWindow
 from csvmodel import MyModel
 
+
 class MainWindow(QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.model = MyModel(self)
 
-	def __init__(self):
-		super().__init__()
-		self.setupUi(self)
-		self.model = MyModel()
+        self.ui.openButton.clicked.connect(self.open_dialog)
+        self.ui.saveButton.clicked.connect(self.save_dialog)
+        self.ui.deleteButton.clicked.connect(self.delete_row)
 
-		self.openButton.clicked.connect(self.open_dialog)
-		self.saveButton.clicked.connect(self.save_dialog)
-		self.deleteButton.clicked.connect(self.delete_row)
+    def open_dialog(self):
+        file_open = QFileDialog.getOpenFileName(self, "Open File", "", "Csv Files (*.csv)")
+        if file_open[0]:
+            self.open_csv(file_open[0])
+        else:
+            print("Cancel")
+            return None
 
-	def open_dialog(self):
-		file_open = QFileDialog.getOpenFileName(self, 'Open File')
-		if file_open[0]:
-			self.open_csv(file_open[0])
-		else:
-			print ("Cancel")
-			return None
+    def save_dialog(self):
+        file_save = QFileDialog.getSaveFileName(self, "Save file", "", "Csv Files (*.csv)")
+        if file_save[0]:
+            self.save_csv(file_save[0])
 
-	def save_dialog(self):
-		file_save = QFileDialog.getSaveFileName(self, 'Save File', '/Documents/', '.csv')
+    def delete_row(self):
+        reply = QMessageBox.question(self, "Delete", "Do you want to delete selected row?",
+                                     QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            currentRow = self.ui.tableView.currentIndex().row()
+            self.model.removeRow(currentRow)
 
-	def delete_row(self):
-		reply = QMessageBox.question(self, "Delete", "Do you want to delete selected row?", 
-			QMessageBox.Yes, QMessageBox.No)
-		if reply == QMessageBox.Yes:
-			indexes = self.tableView.selectedIndexes()
-			for i in indexes:
-				self.model.removeRow(i.row())
+    def open_csv(self, openfile):
+        csv_list = []
+        headers_row = []
+        first_row = True
 
-	def open_csv(self, csvfile):
-		csv_list = []
-		headers_row = []
-		first_row = True
+        try:
+            with open(openfile, 'r') as csvfile:
+                reader = csv.reader(csvfile)
+                for row in reader:
+                    if (first_row):
+                        headers_row = row
+                        first_row = False
+                    else:
+                        csv_list.append(row)
+                self.model = MyModel(csv_list, headers_row)
+                self.ui.tableView.setModel(self.model)
+                self.ui.deleteButton.setEnabled(True)
 
-		try:
-			with open(csvfile, 'r') as csvfile:
-				reader = csv.reader(csvfile)
-				for row in reader:
-					if (first_row):
-						headers_row = row
-						first_row = False
-					else:
-						csv_list.append(row)
-				table = self.tableView
-				self.model = MyModel(csv_list, headers_row)
-				table.setModel(self.model)
-				self.deleteButton.setEnabled(True)
+        except Exception as e:
+            QMessageBox.about(self, "Error", str(e))
+            raise e
 
-		except Exception as e:
-			QMessageBox.about(self, "Error", str(e))
-			raise e
+    def save_csv(self, savefile):
+        try:
+            with open(savefile, 'w') as csvfile:
+                writer = csv.writer(csvfile)
 
-	def save_csv(self):
-		pass
+        except Exception as e:
+            QMessageBox.about(self, "Error", str(e))
+            raise e
+
 
 if __name__ == '__main__':
-	app = QApplication(sys.argv)
-	w = MainWindow()
-	w.show()
-	sys.exit(app.exec_())
+    app = QApplication(sys.argv)
+    w = MainWindow()
+    w.show()
+    sys.exit(app.exec_())
