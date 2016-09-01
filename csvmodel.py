@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 
 
-class MyModel(QAbstractTableModel):
+class DataModel(QAbstractTableModel):
     def __init__(self, data=None, headerdata=None):
         super().__init__()
         if data:
@@ -41,4 +41,4 @@ class MyModel(QAbstractTableModel):
         del self.csv_data[position:position + rows]
         self.endRemoveRows()
 
-        return 0
+        return True
