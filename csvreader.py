@@ -23,10 +23,12 @@ class Csvreader():
             QMessageBox.about(self, "Error", str(e))
             raise e
 
-    def save_csv(self, savefile):
+    def save_csv(self, savefile, data, headers):
         try:
             with open(savefile, 'w') as csvfile:
                 writer = csv.writer(csvfile)
+                writer.writerow(headers)
+                writer.writerows(data)
 
         except Exception as e:
             QMessageBox.about(self, "Error", str(e))

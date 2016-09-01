@@ -32,7 +32,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def save_dialog(self):
         file_save = QFileDialog.getSaveFileName(self, "Save file", "", "Csv Files (*.csv)")
         if file_save[0]:
-            self.csvreader.save_csv(file_save[0])
+            data_save = self.model.csv_data
+            headers_save = self.model.headers
+            self.csvreader.save_csv(file_save[0], data_save, headers_save)
 
     def delete_row(self):
         reply = QMessageBox.question(self, "Delete", "Do you want to delete selected row?",
