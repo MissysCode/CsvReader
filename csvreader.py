@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 class Csvreader():
     def open_csv(self, openfile):
+        # get and return data and headers from .csv-file
         csv_list = []
         headers_row = []
         first_row = True
@@ -24,6 +25,7 @@ class Csvreader():
             raise e
 
     def save_csv(self, savefile, data, headers):
+        #save current data from model as a .csv-file
         try:
             with open(savefile, 'w') as csvfile:
                 writer = csv.writer(csvfile)

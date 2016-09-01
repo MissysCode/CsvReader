@@ -4,9 +4,13 @@ from PyQt5.QtCore import *
 class DataModel(QAbstractTableModel):
     def __init__(self, data=None, headerdata=None):
         super().__init__()
+        # check if data and headers exist, if not, create empty lists
         if data:
             self.csv_data = data
             self.headers = headerdata
+        else:
+        	self.csv_data = []
+        	self.headers = []
 
     def rowCount(self, parent=QModelIndex()):
         count = len(self.csv_data)
@@ -37,6 +41,7 @@ class DataModel(QAbstractTableModel):
         return None
 
     def removeRows(self, position, rows, index):
+    	# remove one row
         self.beginRemoveRows(index, position, position + rows - 1)
         del self.csv_data[position:position + rows]
         self.endRemoveRows()

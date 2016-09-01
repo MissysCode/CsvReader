@@ -20,8 +20,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def open_dialog(self):
         file_open = QFileDialog.getOpenFileName(self, "Open File", "", "Csv Files (*.csv)")
         if file_open[0]:
+            # set data to model and model to tableview
             csv_list, headers_row = self.csvreader.open_csv(file_open[0])
-
             self.model = DataModel(csv_list, headers_row)
             self.ui.tableView.setModel(self.model)
             self.ui.deleteButton.setEnabled(True)
@@ -32,6 +32,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def save_dialog(self):
         file_save = QFileDialog.getSaveFileName(self, "Save file", "", "Csv Files (*.csv)")
         if file_save[0]:
+            # get data from model
             data_save = self.model.csv_data
             headers_save = self.model.headers
             self.csvreader.save_csv(file_save[0], data_save, headers_save)
