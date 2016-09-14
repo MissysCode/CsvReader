@@ -9,8 +9,8 @@ class DataModel(QAbstractTableModel):
             self.csv_data = data
             self.headers = headerdata
         else:
-        	self.csv_data = []
-        	self.headers = []
+            self.csv_data = []
+            self.headers = []
 
     def rowCount(self, parent=QModelIndex()):
         count = len(self.csv_data)

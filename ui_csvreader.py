@@ -72,4 +72,3 @@ class Ui_MainWindow(object):
         self.mergeButton.setText(_translate("MainWindow", "Merge file"))
         self.deleteButton.setText(_translate("MainWindow", "Delete row"))
         self.actionQuit.setText(_translate("MainWindow", "Quit"))
-

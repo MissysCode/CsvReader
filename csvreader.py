@@ -1,9 +1,8 @@
 import csv
-from PyQt5.QtWidgets import QMessageBox
 
 class Csvreader():
     def open_csv(self, openfile):
-        # get and return data and headers from .csv-file
+        #get and return data and headers from .csv-file
         csv_list = []
         headers_row = []
         first_row = True
@@ -21,7 +20,6 @@ class Csvreader():
             return csv_list, headers_row
 
         except Exception as e:
-            QMessageBox.about(self, "Error", str(e))
             raise e
 
     def save_csv(self, savefile, data, headers):
@@ -33,5 +31,27 @@ class Csvreader():
                 writer.writerows(data)
 
         except Exception as e:
-            QMessageBox.about(self, "Error", str(e))
             raise e
+
+    def merge(self, a_data, b_data):
+        #merge datasets, using headers from first
+        keys = []
+        key_index = 3
+
+        for a in a_data:
+            keys.append(a[key_index])
+
+        data = a_data
+
+        for b in b_data:
+            if b[key_index] not in keys:
+                data.append(b)
+
+        return data
+
+
+
+
+
+
+
