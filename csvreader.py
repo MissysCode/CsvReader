@@ -38,7 +38,7 @@ class Csvreader():
     def merge(self, a_data, b_data):
         #merge datasets, using headers from first
         keys = []
-        key_index = 20
+        key_index =  #add index of unique key
 
         for a in a_data:
             keys.append(a[key_index])
