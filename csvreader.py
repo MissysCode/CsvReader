@@ -13,7 +13,6 @@ class Csvreader():
                 reader = csv.reader(csvfile)
                 for row in reader:
                     if (first_row):
-                        print (row[20])
                         headers_row = row
                         first_row = False
                     else:
