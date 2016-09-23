@@ -6,12 +6,14 @@ class Csvreader():
         csv_list = []
         headers_row = []
         first_row = True
+        count = 0
 
         try:
-            with open(openfile, 'r') as csvfile:
+            with open(openfile, 'r', newline='', encoding="ISO-8859-1") as csvfile:
                 reader = csv.reader(csvfile)
                 for row in reader:
                     if (first_row):
+                        print (row[20])
                         headers_row = row
                         first_row = False
                     else:
@@ -36,7 +38,7 @@ class Csvreader():
     def merge(self, a_data, b_data):
         #merge datasets, using headers from first
         keys = []
-        key_index = 3
+        key_index = 20
 
         for a in a_data:
             keys.append(a[key_index])
